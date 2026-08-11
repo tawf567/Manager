@@ -56,7 +56,10 @@ function NavItem({ item, mobile = false }: { item: NavigationItem; mobile?: bool
 
 export function AppShell({ children }: PropsWithChildren) {
   const pathname = usePathname();
-  const isAuthRoute = pathname === "/login" || pathname.startsWith("/auth/");
+  const normalizedPathname =
+    pathname.length > 1 ? pathname.replace(/\/$/, "") : pathname;
+  const isAuthRoute =
+    normalizedPathname === "/login" || normalizedPathname.startsWith("/auth/");
 
   if (isAuthRoute) {
     return <>{children}</>;
