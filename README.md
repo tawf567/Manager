@@ -24,21 +24,14 @@ In Supabase Authentication → URL Configuration, add `http://localhost:3000`
 and the deployed application URL to the allowed redirect URLs. This is required
 for email-confirmation links to return to the application.
 
-## Continuous deployment
+## Continuous validation
 
-GitHub Actions validates every pull request and push to `main`. A successful
-push to `main` triggers the production deployment workflow.
+GitHub Actions validates every pull request and push to `main` by checking
+formatting, types, linting, and the production build.
 
-This application uses server-side auth and cannot be deployed to GitHub Pages.
-Link this repository to a Vercel project, then add these repository secrets:
-
-- `VERCEL_TOKEN`
-- `VERCEL_ORG_ID`
-- `VERCEL_PROJECT_ID`
-
-Set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` in
-the Vercel project's Production environment. Copy the final Vercel URL into
-Supabase Authentication → URL Configuration.
+GitHub Pages can only host static files. The current app requires a Node.js
+server for its secure Supabase SSR authentication and API routes, so it cannot
+be deployed to Pages without changing that security architecture.
 
 ## Validation
 
