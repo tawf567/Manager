@@ -27,6 +27,9 @@ objectives, and automatically seeds them for new users.
 Apply [the Phase 3 tasks migration](supabase/migrations/202608110003_create_tasks.sql)
 to enable fixed daily tasks, flexible scheduled tasks, and dated completions.
 
+Apply [the Phase 4 trackers migration](supabase/migrations/202608110004_create_trackers.sql)
+to enable daily tracker creation and entries.
+
 In Supabase Authentication → URL Configuration, add `http://localhost:3000`
 and `https://tawf567.github.io/Manager/auth/callback/` to the allowed redirect
 URLs. This is required for email-confirmation links to return to the application.
