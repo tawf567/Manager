@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { PageHeader } from "@/components/layout/page-header";
+import { ObjectivesManager } from "@/components/objectives/objectives-manager";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
 
@@ -62,6 +63,7 @@ export default function SettingsPage() {
           Sign out
         </Button>
       </section>
+      <ObjectivesManager />
     </div>
   );
 }

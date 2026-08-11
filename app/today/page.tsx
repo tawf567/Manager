@@ -1,25 +1,8 @@
-import { ArrowRight, HeartPulse, Sparkles, WalletCards } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
+import { ObjectiveCards } from "@/components/objectives/objective-cards";
 import { PageHeader } from "@/components/layout/page-header";
 import { Button } from "@/components/ui/button";
-
-const objectives = [
-  {
-    name: "Healthy",
-    description: "Build energy through small, repeatable choices.",
-    icon: HeartPulse,
-  },
-  {
-    name: "Wealthy",
-    description: "Make steady progress toward financial freedom.",
-    icon: WalletCards,
-  },
-  {
-    name: "Happiness",
-    description: "Make room for what keeps life meaningful.",
-    icon: Sparkles,
-  },
-];
 
 export default function TodayPage() {
   return (
@@ -41,28 +24,7 @@ export default function TodayPage() {
             </a>
           </Button>
         </div>
-        <div className="flex snap-x gap-3 overflow-x-auto pb-2 lg:grid lg:grid-cols-3 lg:overflow-visible">
-          {objectives.map(({ name, description, icon: Icon }) => (
-            <article
-              className="border-border bg-card min-w-[260px] snap-start rounded-2xl border p-5 lg:min-w-0"
-              key={name}
-            >
-              <span className="bg-primary/15 text-primary grid size-10 place-items-center rounded-xl">
-                <Icon aria-hidden="true" className="size-5" />
-              </span>
-              <h3 className="mt-5 font-semibold">{name}</h3>
-              <p className="text-muted-foreground mt-2 text-sm leading-6">
-                {description}
-              </p>
-              <div
-                className="bg-muted mt-5 h-1.5 overflow-hidden rounded-full"
-                aria-label="Progress pending setup"
-              >
-                <div className="bg-primary h-full w-0 rounded-full" />
-              </div>
-            </article>
-          ))}
-        </div>
+        <ObjectiveCards />
       </section>
 
       <section

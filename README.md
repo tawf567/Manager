@@ -20,6 +20,10 @@ Apply [the Phase 1 migration](supabase/migrations/202608110001_create_user_profi
 in the Supabase SQL Editor before creating users. The migration creates the
 profile/settings tables, first-login trigger, and row-level-security policies.
 
+Then apply [the Phase 2 objectives migration](supabase/migrations/202608110002_create_objectives.sql).
+It seeds Healthy, Wealthy, and Happiness for every existing user without
+objectives, and automatically seeds them for new users.
+
 In Supabase Authentication → URL Configuration, add `http://localhost:3000`
 and `https://tawf567.github.io/Manager/auth/callback/` to the allowed redirect
 URLs. This is required for email-confirmation links to return to the application.
