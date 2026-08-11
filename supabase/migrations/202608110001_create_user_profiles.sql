@@ -22,6 +22,11 @@ create table if not exists public.user_settings (
 alter table public.users enable row level security;
 alter table public.user_settings enable row level security;
 
+drop policy if exists "Users can view their own profile" on public.users;
+drop policy if exists "Users can view their own settings" on public.user_settings;
+drop policy if exists "Users can create their own settings" on public.user_settings;
+drop policy if exists "Users can update their own settings" on public.user_settings;
+
 create policy "Users can view their own profile"
   on public.users for select to authenticated
   using ((select auth.uid()) = id);
@@ -50,10 +55,12 @@ begin
 end;
 $$;
 
+drop trigger if exists set_users_updated_at on public.users;
 create trigger set_users_updated_at
   before update on public.users
   for each row execute function public.set_updated_at();
 
+drop trigger if exists set_user_settings_updated_at on public.user_settings;
 create trigger set_user_settings_updated_at
   before update on public.user_settings
   for each row execute function public.set_updated_at();
@@ -74,6 +81,7 @@ begin
 end;
 $$;
 
+drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created
   after insert on auth.users
   for each row execute procedure public.handle_new_user();
