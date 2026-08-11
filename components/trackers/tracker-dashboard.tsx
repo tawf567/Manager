@@ -71,14 +71,12 @@ export function TrackerDashboard() {
     const supabase = createClient();
     const { data: auth } = await supabase.auth.getUser();
     if (!auth.user) return;
-    const { error } = await supabase
-      .from("trackers")
-      .insert({
-        user_id: auth.user.id,
-        name: trimmed,
-        tracker_type: type,
-        sort_order: trackers.length,
-      });
+    const { error } = await supabase.from("trackers").insert({
+      user_id: auth.user.id,
+      name: trimmed,
+      tracker_type: type,
+      sort_order: trackers.length,
+    });
     if (error) {
       setMessage("Couldn’t create tracker.");
       return;
@@ -102,17 +100,15 @@ export function TrackerDashboard() {
     const supabase = createClient();
     const { data: auth } = await supabase.auth.getUser();
     if (!auth.user) return;
-    const { error } = await supabase
-      .from("tracker_entries")
-      .upsert(
-        {
-          tracker_id: tracker.id,
-          user_id: auth.user.id,
-          entry_date: today(),
-          ...values,
-        },
-        { onConflict: "tracker_id,entry_date" },
-      );
+    const { error } = await supabase.from("tracker_entries").upsert(
+      {
+        tracker_id: tracker.id,
+        user_id: auth.user.id,
+        entry_date: today(),
+        ...values,
+      },
+      { onConflict: "tracker_id,entry_date" },
+    );
     if (error) {
       setMessage("Couldn’t save entry.");
       return;
