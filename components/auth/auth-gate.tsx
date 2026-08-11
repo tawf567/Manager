@@ -14,14 +14,19 @@ export function AuthGate({ children }: PropsWithChildren) {
     const supabase = createClient();
     let isMounted = true;
 
-    void supabase.auth.getUser().then(({ data }) => {
-      if (!isMounted) return;
-      if (!data.user) {
-        router.replace(`/login?next=${encodeURIComponent(pathname)}`);
-        return;
-      }
-      setIsReady(true);
-    });
+    void supabase.auth
+      .getUser()
+      .then(({ data }) => {
+        if (!isMounted) return;
+        if (!data.user) {
+          router.replace(`/login?next=${encodeURIComponent(pathname)}`);
+          return;
+        }
+        setIsReady(true);
+      })
+      .catch(() => {
+        if (isMounted) router.replace(`/login?next=${encodeURIComponent(pathname)}`);
+      });
 
     return () => {
       isMounted = false;

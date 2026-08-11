@@ -10,9 +10,12 @@ export default function Home() {
 
   useEffect(() => {
     const supabase = createClient();
-    void supabase.auth.getUser().then(({ data }) => {
-      router.replace(data.user ? "/today" : "/login");
-    });
+    void supabase.auth
+      .getUser()
+      .then(({ data }) => {
+        router.replace(data.user ? "/today" : "/login");
+      })
+      .catch(() => router.replace("/login"));
   }, [router]);
 
   return null;
