@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 
 import { PageHeader } from "@/components/layout/page-header";
 import { ObjectivesManager } from "@/components/objectives/objectives-manager";
+import { TasksManager } from "@/components/tasks/tasks-manager";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
 
@@ -64,6 +65,7 @@ export default function SettingsPage() {
         </Button>
       </section>
       <ObjectivesManager />
+      <TasksManager />
     </div>
   );
 }
