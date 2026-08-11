@@ -13,6 +13,7 @@ import type { PropsWithChildren } from "react";
 
 import { cn } from "@/lib/utils";
 
+import { AuthGate } from "../auth/auth-gate";
 import { TimezoneSync } from "./timezone-sync";
 
 type NavigationItem = {
@@ -62,40 +63,42 @@ export function AppShell({ children }: PropsWithChildren) {
   }
 
   return (
-    <div className="bg-background text-foreground min-h-dvh">
-      <TimezoneSync />
-      <aside className="border-border bg-secondary/75 fixed inset-y-0 left-0 z-20 hidden w-60 border-r px-3 py-5 lg:flex lg:flex-col">
-        <Link
-          className="focus-visible:ring-ring mb-8 flex min-h-11 items-center gap-3 rounded-xl px-3 focus-visible:ring-2 focus-visible:outline-none"
-          href="/today"
+    <AuthGate>
+      <div className="bg-background text-foreground min-h-dvh">
+        <TimezoneSync />
+        <aside className="border-border bg-secondary/75 fixed inset-y-0 left-0 z-20 hidden w-60 border-r px-3 py-5 lg:flex lg:flex-col">
+          <Link
+            className="focus-visible:ring-ring mb-8 flex min-h-11 items-center gap-3 rounded-xl px-3 focus-visible:ring-2 focus-visible:outline-none"
+            href="/today"
+          >
+            <span className="bg-primary text-primary-foreground grid size-8 place-items-center rounded-lg">
+              <CheckSquare2 aria-hidden="true" className="size-4" />
+            </span>
+            <span className="text-base font-semibold tracking-tight">Manager</span>
+          </Link>
+          <nav aria-label="Primary navigation" className="space-y-1">
+            {navigation.map((item) => (
+              <NavItem item={item} key={item.href} />
+            ))}
+          </nav>
+          <p className="text-muted-foreground mt-auto px-3 text-xs leading-5">
+            Build a life you’re proud to manage.
+          </p>
+        </aside>
+
+        <main className="mx-auto min-h-dvh w-full max-w-7xl px-4 pt-6 pb-24 sm:px-6 lg:ml-60 lg:w-[calc(100%-15rem)] lg:px-10 lg:py-10">
+          {children}
+        </main>
+
+        <nav
+          aria-label="Primary navigation"
+          className="border-border bg-secondary/95 fixed inset-x-0 bottom-0 z-20 flex min-h-[72px] border-t px-2 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden"
         >
-          <span className="bg-primary text-primary-foreground grid size-8 place-items-center rounded-lg">
-            <CheckSquare2 aria-hidden="true" className="size-4" />
-          </span>
-          <span className="text-base font-semibold tracking-tight">Manager</span>
-        </Link>
-        <nav aria-label="Primary navigation" className="space-y-1">
           {navigation.map((item) => (
-            <NavItem item={item} key={item.href} />
+            <NavItem item={item} key={item.href} mobile />
           ))}
         </nav>
-        <p className="text-muted-foreground mt-auto px-3 text-xs leading-5">
-          Build a life you’re proud to manage.
-        </p>
-      </aside>
-
-      <main className="mx-auto min-h-dvh w-full max-w-7xl px-4 pt-6 pb-24 sm:px-6 lg:ml-60 lg:w-[calc(100%-15rem)] lg:px-10 lg:py-10">
-        {children}
-      </main>
-
-      <nav
-        aria-label="Primary navigation"
-        className="border-border bg-secondary/95 fixed inset-x-0 bottom-0 z-20 flex min-h-[72px] border-t px-2 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden"
-      >
-        {navigation.map((item) => (
-          <NavItem item={item} key={item.href} mobile />
-        ))}
-      </nav>
-    </div>
+      </div>
+    </AuthGate>
   );
 }
