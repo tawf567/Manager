@@ -7,10 +7,10 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "Manager",
-    template: "%s · Manager",
+    default: "Daylight",
+    template: "%s · Daylight",
   },
-  description: "A focused personal life-management app.",
+  description: "A visual planner for days that feel like yours.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {

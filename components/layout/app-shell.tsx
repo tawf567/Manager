@@ -2,10 +2,10 @@
 
 import {
   Award,
-  CheckSquare2,
+  CalendarDays,
   LineChart,
+  MoonStar,
   Settings,
-  Target,
   type LucideIcon,
 } from "lucide-react";
 import Link from "next/link";
@@ -24,10 +24,10 @@ type NavigationItem = {
 };
 
 const navigation: NavigationItem[] = [
-  { href: "/today", label: "Today", icon: CheckSquare2 },
-  { href: "/tracking", label: "Track", icon: Target },
-  { href: "/performance", label: "Progress", icon: LineChart },
-  { href: "/achievements", label: "Journal", icon: Award },
+  { href: "/today", label: "My day", icon: CalendarDays },
+  { href: "/tracking", label: "Check in", icon: MoonStar },
+  { href: "/performance", label: "Patterns", icon: LineChart },
+  { href: "/achievements", label: "Wins", icon: Award },
 ];
 
 function NavItem({ item, mobile = false }: { item: NavigationItem; mobile?: boolean }) {
@@ -44,8 +44,8 @@ function NavItem({ item, mobile = false }: { item: NavigationItem; mobile?: bool
           ? "min-h-14 flex-1 flex-col justify-center gap-1 px-1 text-[11px]"
           : "min-h-10 rounded-lg px-3 text-sm",
         isActive
-          ? "bg-primary text-primary-foreground shadow-sm"
-          : "text-muted-foreground hover:bg-muted hover:text-foreground",
+          ? "bg-[#e8e3ff] text-[#4635b1]"
+          : "text-muted-foreground hover:text-foreground hover:bg-[#f6f2ed]",
       )}
       href={item.href}
     >
@@ -70,15 +70,15 @@ export function AppShell({ children }: PropsWithChildren) {
     <AuthGate>
       <div className="bg-background text-foreground min-h-dvh">
         <TimezoneSync />
-        <aside className="border-border fixed inset-y-0 left-0 z-20 hidden w-60 border-r bg-[#0f0f17]/95 px-3 py-4 lg:flex lg:flex-col">
+        <aside className="border-border fixed inset-y-0 left-0 z-20 hidden w-64 border-r bg-[#fffbf7]/95 px-4 py-5 lg:flex lg:flex-col">
           <Link
             className="focus-visible:ring-ring mb-8 flex min-h-11 items-center gap-3 rounded-lg px-3 focus-visible:ring-2 focus-visible:outline-none"
             href="/today"
           >
-            <span className="bg-primary text-primary-foreground grid size-8 place-items-center rounded-lg shadow-sm">
-              <CheckSquare2 aria-hidden="true" className="size-4" />
+            <span className="text-primary-foreground grid size-10 place-items-center rounded-2xl bg-[#5545d6] shadow-[0_5px_0_#3e32a4]">
+              <CalendarDays aria-hidden="true" className="size-5" />
             </span>
-            <span className="text-base font-bold tracking-[-0.03em]">Manager</span>
+            <span className="text-lg font-extrabold tracking-[-0.05em]">Daylight</span>
           </Link>
           <nav aria-label="Primary navigation" className="space-y-1">
             {navigation.map((item) => (
@@ -87,7 +87,7 @@ export function AppShell({ children }: PropsWithChildren) {
           </nav>
           <div className="mt-auto space-y-3">
             <p className="text-muted-foreground px-3 text-xs leading-5">
-              Personal operating system
+              A softer way to plan.
             </p>
             <Link
               className="text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-ring flex min-h-11 items-center gap-3 rounded-xl px-3 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:outline-none"
@@ -99,16 +99,16 @@ export function AppShell({ children }: PropsWithChildren) {
           </div>
         </aside>
 
-        <main className="mx-auto min-h-dvh w-full max-w-7xl px-4 pt-6 pb-24 sm:px-6 lg:ml-60 lg:w-[calc(100%-15rem)] lg:px-10 lg:py-10">
+        <main className="mx-auto min-h-dvh w-full max-w-7xl px-4 pt-6 pb-24 sm:px-6 lg:ml-64 lg:w-[calc(100%-16rem)] lg:px-10 lg:py-10">
           <div className="mb-6 flex items-center justify-between lg:hidden">
             <Link
               className="flex items-center gap-2 text-base font-bold tracking-[-0.03em]"
               href="/today"
             >
               <span className="bg-primary text-primary-foreground grid size-8 place-items-center rounded-lg">
-                <CheckSquare2 aria-hidden="true" className="size-4" />
+                <CalendarDays aria-hidden="true" className="size-4" />
               </span>
-              Manager
+              Daylight
             </Link>
             <Link
               aria-label="Open settings"
