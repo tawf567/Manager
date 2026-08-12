@@ -178,7 +178,7 @@ export function TasksManager() {
           </div>
         </form>
       ) : null}
-      {message ? <p className="text-sm text-red-700">{message}</p> : null}
+      {message ? <p className="text-sm text-red-300">{message}</p> : null}
       <div className="space-y-2">
         {tasks.map((task) => (
           <article

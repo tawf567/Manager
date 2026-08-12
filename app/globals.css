@@ -21,22 +21,22 @@
 }
 
 :root {
-  color-scheme: light;
-  --background: #f8f7f4;
-  --foreground: #292722;
-  --card: #fffefd;
-  --card-foreground: #292722;
-  --popover: #fffefd;
-  --popover-foreground: #292722;
-  --primary: #526a4d;
-  --primary-foreground: #ffffff;
-  --secondary: #f0eee8;
-  --secondary-foreground: #39362f;
-  --muted: #f4f2ed;
-  --muted-foreground: #77736a;
-  --border: #e5e1d8;
-  --input: #d8d3c9;
-  --ring: #8ba284;
+  color-scheme: dark;
+  --background: #11130f;
+  --foreground: #f4f0e7;
+  --card: #1a1d18;
+  --card-foreground: #f4f0e7;
+  --popover: #23261f;
+  --popover-foreground: #f4f0e7;
+  --primary: #a7c99b;
+  --primary-foreground: #172014;
+  --secondary: #252920;
+  --secondary-foreground: #f4f0e7;
+  --muted: #2d3129;
+  --muted-foreground: #b5b7ac;
+  --border: #353a31;
+  --input: #4b5147;
+  --ring: #bad9ae;
 }
 
 * {
@@ -50,7 +50,7 @@ html {
 body {
   min-width: 320px;
   background:
-    radial-gradient(circle at top left, #f0eee8 0, transparent 31rem), var(--background);
+    radial-gradient(circle at top left, #20281d 0, transparent 31rem), var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;

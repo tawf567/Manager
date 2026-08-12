@@ -1,7 +1,8 @@
 "use client";
 
 import { format } from "date-fns";
-import { Check, ListTodo, Plus } from "lucide-react";
+import { AlarmClock, ArrowRight, Check, ListTodo, Plus } from "lucide-react";
+import Link from "next/link";
 import { type FormEvent, useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -12,6 +13,7 @@ const today = () => format(new Date(), "yyyy-MM-dd");
 
 export function TodayTasks() {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [upcomingTask, setUpcomingTask] = useState<Task>();
   const [completed, setCompleted] = useState<Set<string>>(new Set());
   const [name, setName] = useState("");
   const [message, setMessage] = useState<string>();
@@ -36,10 +38,22 @@ export function TodayTasks() {
         .eq("user_id", auth.user.id)
         .eq("date", date),
     ]);
-    const visible = ((allTasks as Task[] | null) ?? []).filter(
+    const storedTasks = (allTasks as Task[] | null) ?? [];
+    const visible = storedTasks.filter(
       (task) => task.task_type === "fixed" || task.scheduled_date === date,
     );
+    const nextTask = storedTasks
+      .filter(
+        (task) =>
+          task.task_type === "flexible" &&
+          task.scheduled_date !== null &&
+          task.scheduled_date > date,
+      )
+      .sort((first, second) =>
+        (first.scheduled_date ?? "").localeCompare(second.scheduled_date ?? ""),
+      )[0];
     setTasks(visible);
+    setUpcomingTask(nextTask);
     setCompleted(
       new Set(
         ((completions as TaskCompletion[] | null) ?? [])
@@ -103,6 +117,35 @@ export function TodayTasks() {
 
   return (
     <section aria-labelledby="tasks-heading" className="space-y-5">
+      {upcomingTask?.scheduled_date ? (
+        <aside className="border-primary/25 from-primary/20 via-card to-card relative overflow-hidden rounded-3xl border bg-gradient-to-br p-5 shadow-[0_14px_32px_rgba(0,0,0,0.22)] sm:flex sm:items-center sm:justify-between sm:gap-6 sm:p-6">
+          <div className="relative flex gap-4">
+            <span className="bg-primary text-primary-foreground grid size-11 shrink-0 place-items-center rounded-2xl shadow-sm">
+              <AlarmClock aria-hidden="true" className="size-5" />
+            </span>
+            <div>
+              <p className="text-primary text-xs font-bold tracking-[0.12em] uppercase">
+                Up next
+              </p>
+              <h3 className="mt-1 text-lg font-semibold tracking-[-0.02em]">
+                {upcomingTask.name}
+              </h3>
+              <p className="text-muted-foreground mt-1 text-sm">
+                {format(
+                  new Date(`${upcomingTask.scheduled_date}T00:00:00`),
+                  "EEEE, MMMM d",
+                )}
+              </p>
+            </div>
+          </div>
+          <Link
+            className="text-primary hover:text-primary/80 mt-4 inline-flex min-h-11 items-center gap-1 text-sm font-semibold sm:mt-0"
+            href="/settings"
+          >
+            Manage tasks <ArrowRight aria-hidden="true" className="size-4" />
+          </Link>
+        </aside>
+      ) : null}
       <div className="border-border bg-card overflow-hidden rounded-3xl border p-5 shadow-[0_12px_30px_rgba(57,54,47,0.05)] sm:p-7">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
           <div>
@@ -162,7 +205,7 @@ export function TodayTasks() {
           <Plus aria-hidden="true" className="size-5" />
         </Button>
       </form>
-      {message ? <p className="text-sm text-red-700">{message}</p> : null}
+      {message ? <p className="text-sm text-red-300">{message}</p> : null}
       <div className="space-y-2">
         {tasks.length === 0 ? (
           <p className="border-border bg-card text-muted-foreground rounded-2xl border border-dashed p-6 text-center text-sm leading-6">

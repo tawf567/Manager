@@ -149,7 +149,7 @@ export function TrackerDashboard() {
           Add tracker
         </Button>
       </form>
-      {message ? <p className="text-sm text-red-700">{message}</p> : null}
+      {message ? <p className="text-sm text-red-300">{message}</p> : null}
       <div className="grid gap-3 lg:grid-cols-2">
         {trackers.length === 0 ? (
           <p className="border-border bg-card text-muted-foreground rounded-3xl border border-dashed p-8 text-center text-sm leading-6 lg:col-span-2">

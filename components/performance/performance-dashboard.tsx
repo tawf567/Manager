@@ -141,17 +141,17 @@ export function PerformanceDashboard() {
         <div className="mt-6 h-64">
           <ResponsiveContainer height="100%" width="100%">
             <BarChart data={chartData}>
-              <XAxis dataKey="day" stroke="#aaa59a" tick={{ fontSize: 11 }} />
-              <YAxis allowDecimals={false} stroke="#aaa59a" tick={{ fontSize: 11 }} />
+              <XAxis dataKey="day" stroke="#8f9489" tick={{ fontSize: 11 }} />
+              <YAxis allowDecimals={false} stroke="#8f9489" tick={{ fontSize: 11 }} />
               <Tooltip
                 contentStyle={{
-                  background: "#fffefd",
-                  border: "1px solid #e5e1d8",
+                  background: "#23261f",
+                  border: "1px solid #353a31",
                   borderRadius: 12,
-                  color: "#292722",
+                  color: "#f4f0e7",
                 }}
               />
-              <Bar dataKey="completed" fill="#526a4d" radius={[6, 6, 0, 0]} />
+              <Bar dataKey="completed" fill="#a7c99b" radius={[6, 6, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

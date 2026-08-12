@@ -48,8 +48,8 @@ export function ObjectiveCards() {
           <span
             className="grid size-9 place-items-center rounded-xl"
             style={{
-              backgroundColor: `${objective.color ?? "#526a4d"}22`,
-              color: objective.color ?? "#526a4d",
+              backgroundColor: `${objective.color ?? "#a7c99b"}22`,
+              color: objective.color ?? "#a7c99b",
             }}
           >
             <ObjectiveIcon className="size-5" icon={objective.icon} />

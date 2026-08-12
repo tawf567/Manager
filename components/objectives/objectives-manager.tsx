@@ -17,7 +17,7 @@ import { objectiveSchema } from "@/lib/validation/objective";
 import type { Objective } from "@/types/objective";
 
 type Draft = { name: string; description: string; color: string };
-const blankDraft: Draft = { name: "", description: "", color: "#526a4d" };
+const blankDraft: Draft = { name: "", description: "", color: "#a7c99b" };
 
 export function ObjectivesManager() {
   const [objectives, setObjectives] = useState<Objective[]>([]);
@@ -53,7 +53,7 @@ export function ObjectivesManager() {
     setDraft({
       name: objective.name,
       description: objective.description ?? "",
-      color: objective.color ?? "#526a4d",
+      color: objective.color ?? "#a7c99b",
     });
     setIsCreating(false);
     setMessage(undefined);
@@ -207,7 +207,7 @@ export function ObjectivesManager() {
           </div>
         </form>
       ) : null}
-      {message ? <p className="text-sm text-red-700">{message}</p> : null}
+      {message ? <p className="text-sm text-red-300">{message}</p> : null}
       <div className="space-y-2">
         {objectives.map((objective) => (
           <article
@@ -216,7 +216,7 @@ export function ObjectivesManager() {
           >
             <span
               className="size-3 rounded-full"
-              style={{ backgroundColor: objective.color ?? "#526a4d" }}
+              style={{ backgroundColor: objective.color ?? "#a7c99b" }}
             />
             <div className="min-w-0 flex-1">
               <h3 className="truncate text-sm font-medium">{objective.name}</h3>

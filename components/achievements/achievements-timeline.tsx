@@ -85,7 +85,7 @@ export function AchievementsTimeline() {
           <Plus aria-hidden="true" className="size-4" /> Add to journal
         </Button>
       </form>
-      {message ? <p className="text-sm text-red-700">{message}</p> : null}
+      {message ? <p className="text-sm text-red-300">{message}</p> : null}
       <div className="space-y-3">
         {items.length ? (
           items.map((item) => (
