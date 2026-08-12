@@ -17,7 +17,7 @@ import { objectiveSchema } from "@/lib/validation/objective";
 import type { Objective } from "@/types/objective";
 
 type Draft = { name: string; description: string; color: string };
-const blankDraft: Draft = { name: "", description: "", color: "#7c8cff" };
+const blankDraft: Draft = { name: "", description: "", color: "#526a4d" };
 
 export function ObjectivesManager() {
   const [objectives, setObjectives] = useState<Objective[]>([]);
@@ -53,7 +53,7 @@ export function ObjectivesManager() {
     setDraft({
       name: objective.name,
       description: objective.description ?? "",
-      color: objective.color ?? "#7c8cff",
+      color: objective.color ?? "#526a4d",
     });
     setIsCreating(false);
     setMessage(undefined);
@@ -140,10 +140,16 @@ export function ObjectivesManager() {
   }
 
   return (
-    <section className="space-y-4" aria-labelledby="objectives-settings-heading">
+    <section
+      className="border-border bg-card space-y-5 rounded-3xl border p-5 shadow-sm sm:p-6"
+      aria-labelledby="objectives-settings-heading"
+    >
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="font-semibold" id="objectives-settings-heading">
+          <p className="text-primary text-xs font-bold tracking-[0.12em] uppercase">
+            Direction
+          </p>
+          <h2 className="mt-1 font-semibold" id="objectives-settings-heading">
             Objectives
           </h2>
           <p className="text-muted-foreground mt-1 text-sm">
@@ -163,12 +169,9 @@ export function ObjectivesManager() {
         </Button>
       </div>
       {isCreating || editingId ? (
-        <form
-          className="border-border bg-card space-y-3 rounded-2xl border p-4"
-          onSubmit={save}
-        >
+        <form className="bg-secondary space-y-3 rounded-2xl p-4" onSubmit={save}>
           <input
-            className="border-input bg-background h-11 w-full rounded-xl border px-3 text-sm"
+            className="border-input bg-card focus:ring-ring h-11 w-full rounded-xl border px-3 text-sm outline-none focus:ring-2"
             maxLength={80}
             onChange={(event) => setDraft({ ...draft, name: event.target.value })}
             placeholder="Objective name"
@@ -176,7 +179,7 @@ export function ObjectivesManager() {
             value={draft.name}
           />
           <textarea
-            className="border-input bg-background min-h-20 w-full rounded-xl border p-3 text-sm"
+            className="border-input bg-card focus:ring-ring min-h-20 w-full rounded-xl border p-3 text-sm outline-none focus:ring-2"
             maxLength={280}
             onChange={(event) =>
               setDraft({ ...draft, description: event.target.value })
@@ -204,16 +207,16 @@ export function ObjectivesManager() {
           </div>
         </form>
       ) : null}
-      {message ? <p className="text-sm text-red-300">{message}</p> : null}
+      {message ? <p className="text-sm text-red-700">{message}</p> : null}
       <div className="space-y-2">
         {objectives.map((objective) => (
           <article
-            className="border-border bg-card flex items-center gap-3 rounded-xl border p-3"
+            className="bg-secondary/70 flex items-center gap-3 rounded-2xl p-3"
             key={objective.id}
           >
             <span
               className="size-3 rounded-full"
-              style={{ backgroundColor: objective.color ?? "#7c8cff" }}
+              style={{ backgroundColor: objective.color ?? "#526a4d" }}
             />
             <div className="min-w-0 flex-1">
               <h3 className="truncate text-sm font-medium">{objective.name}</h3>

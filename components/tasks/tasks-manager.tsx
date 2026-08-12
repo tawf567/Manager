@@ -103,10 +103,16 @@ export function TasksManager() {
     setOpen(true);
   }
   return (
-    <section aria-labelledby="tasks-settings-heading" className="space-y-4">
+    <section
+      aria-labelledby="tasks-settings-heading"
+      className="border-border bg-card space-y-5 rounded-3xl border p-5 shadow-sm sm:p-6"
+    >
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="font-semibold" id="tasks-settings-heading">
+          <p className="text-primary text-xs font-bold tracking-[0.12em] uppercase">
+            Planning
+          </p>
+          <h2 className="mt-1 font-semibold" id="tasks-settings-heading">
             Tasks
           </h2>
           <p className="text-muted-foreground mt-1 text-sm">
@@ -126,12 +132,9 @@ export function TasksManager() {
         </Button>
       </div>
       {open ? (
-        <form
-          className="border-border bg-card space-y-3 rounded-2xl border p-4"
-          onSubmit={save}
-        >
+        <form className="bg-secondary space-y-3 rounded-2xl p-4" onSubmit={save}>
           <input
-            className="border-input bg-background h-11 w-full rounded-xl border px-3 text-sm"
+            className="border-input bg-card focus:ring-ring h-11 w-full rounded-xl border px-3 text-sm outline-none focus:ring-2"
             onChange={(event) => setDraft({ ...draft, name: event.target.value })}
             placeholder="Task name"
             value={draft.name}
@@ -139,7 +142,7 @@ export function TasksManager() {
           <label className="text-muted-foreground block text-sm">
             Type
             <select
-              className="border-input bg-background mt-1 h-11 w-full rounded-xl border px-3 text-sm"
+              className="border-input bg-card focus:ring-ring mt-1 h-11 w-full rounded-xl border px-3 text-sm outline-none focus:ring-2"
               onChange={(event) =>
                 setDraft({
                   ...draft,
@@ -156,7 +159,7 @@ export function TasksManager() {
             <label className="text-muted-foreground block text-sm">
               Scheduled date
               <input
-                className="border-input bg-background mt-1 h-11 w-full rounded-xl border px-3 text-sm"
+                className="border-input bg-card focus:ring-ring mt-1 h-11 w-full rounded-xl border px-3 text-sm outline-none focus:ring-2"
                 onChange={(event) =>
                   setDraft({ ...draft, scheduledDate: event.target.value })
                 }
@@ -175,11 +178,11 @@ export function TasksManager() {
           </div>
         </form>
       ) : null}
-      {message ? <p className="text-sm text-red-300">{message}</p> : null}
+      {message ? <p className="text-sm text-red-700">{message}</p> : null}
       <div className="space-y-2">
         {tasks.map((task) => (
           <article
-            className="border-border bg-card flex items-center gap-3 rounded-xl border p-3"
+            className="bg-secondary/70 flex items-center gap-3 rounded-2xl p-3"
             key={task.id}
           >
             <div className="min-w-0 flex-1">

@@ -7,14 +7,13 @@ export type DatedEntry = {
 };
 
 export function calculateTaskCompletionRate(
-  taskIds: string[],
+  expectedCount: number,
   completions: DatedCompletion[],
 ) {
-  if (taskIds.length === 0) return 0;
-  const completed = completions.filter(
-    (item) => item.completed && taskIds.includes(item.task_id),
-  ).length;
-  return Math.round((completed / taskIds.length) * 100);
+  if (expectedCount === 0) return 0;
+  return Math.round(
+    (completions.filter((item) => item.completed).length / expectedCount) * 100,
+  );
 }
 
 export function calculateCurrentStreak(

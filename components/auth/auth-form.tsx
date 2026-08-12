@@ -107,8 +107,8 @@ export function AuthForm() {
           type="password"
         />
       </div>
-      {error ? <p className="text-sm text-red-300">{error}</p> : null}
-      {message ? <p className="text-sm text-emerald-300">{message}</p> : null}
+      {error ? <p className="text-sm text-red-700">{error}</p> : null}
+      {message ? <p className="text-sm text-emerald-700">{message}</p> : null}
       <Button className="w-full" disabled={isPending} type="submit">
         {isPending ? "Please wait…" : mode === "sign-in" ? "Sign in" : "Create account"}
       </Button>

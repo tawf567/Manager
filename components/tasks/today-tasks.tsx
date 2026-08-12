@@ -1,7 +1,7 @@
 "use client";
 
 import { format } from "date-fns";
-import { Check, Plus } from "lucide-react";
+import { Check, ListTodo, Plus } from "lucide-react";
 import { type FormEvent, useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,8 @@ export function TodayTasks() {
   const [completed, setCompleted] = useState<Set<string>>(new Set());
   const [name, setName] = useState("");
   const [message, setMessage] = useState<string>();
+  const completeCount = completed.size;
+  const progress = tasks.length ? Math.round((completeCount / tasks.length) * 100) : 0;
 
   async function load() {
     const supabase = createClient();
@@ -100,52 +102,94 @@ export function TodayTasks() {
   }
 
   return (
-    <section aria-labelledby="tasks-heading" className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold" id="tasks-heading">
-          Today’s tasks
-        </h2>
-        <span className="text-muted-foreground text-sm">
-          {completed.size}/{tasks.length} done
-        </span>
+    <section aria-labelledby="tasks-heading" className="space-y-5">
+      <div className="border-border bg-card overflow-hidden rounded-3xl border p-5 shadow-[0_12px_30px_rgba(57,54,47,0.05)] sm:p-7">
+        <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <p className="text-primary flex items-center gap-2 text-xs font-bold tracking-[0.12em] uppercase">
+              <ListTodo aria-hidden="true" className="size-3.5" /> Today’s focus
+            </p>
+            <h2
+              className="mt-2 text-2xl font-semibold tracking-[-0.03em]"
+              id="tasks-heading"
+            >
+              {tasks.length === 0
+                ? "A clear day ahead"
+                : completeCount === tasks.length
+                  ? "Everything is complete"
+                  : "One task at a time"}
+            </h2>
+            <p className="text-muted-foreground mt-2 text-sm">
+              {tasks.length === 0
+                ? "Add the first thing you want to make progress on."
+                : `${completeCount} of ${tasks.length} tasks complete`}
+            </p>
+          </div>
+          <div className="bg-secondary flex size-20 shrink-0 flex-col items-center justify-center rounded-2xl">
+            <span className="text-xl font-bold tracking-[-0.04em]">{progress}%</span>
+            <span className="text-muted-foreground text-[10px] font-bold tracking-[0.1em] uppercase">
+              done
+            </span>
+          </div>
+        </div>
+        <div
+          className="bg-muted mt-6 h-2 overflow-hidden rounded-full"
+          role="progressbar"
+          aria-label="Today’s task completion"
+          aria-valuemax={tasks.length}
+          aria-valuemin={0}
+          aria-valuenow={completeCount}
+        >
+          <div
+            className="bg-primary h-full rounded-full transition-all duration-500"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
       </div>
-      <form className="flex gap-2" onSubmit={addFlexible}>
+
+      <form
+        className="border-border bg-card flex gap-2 rounded-2xl border p-2 shadow-sm"
+        onSubmit={addFlexible}
+      >
         <input
-          className="border-input bg-card h-11 min-w-0 flex-1 rounded-xl border px-3 text-sm"
+          aria-label="Add a task for today"
+          className="placeholder:text-muted-foreground min-w-0 flex-1 rounded-xl bg-transparent px-3 text-sm outline-none"
           onChange={(event) => setName(event.target.value)}
           placeholder="Add a task for today"
           value={name}
         />
-        <Button aria-label="Add flexible task" size="icon" type="submit">
+        <Button aria-label="Add task" size="icon" type="submit">
           <Plus aria-hidden="true" className="size-5" />
         </Button>
       </form>
-      {message ? <p className="text-sm text-red-300">{message}</p> : null}
+      {message ? <p className="text-sm text-red-700">{message}</p> : null}
       <div className="space-y-2">
         {tasks.length === 0 ? (
-          <p className="border-border bg-secondary/40 text-muted-foreground rounded-2xl border border-dashed p-5 text-sm">
-            No tasks scheduled. Add one above or manage recurring tasks in Settings.
+          <p className="border-border bg-card text-muted-foreground rounded-2xl border border-dashed p-6 text-center text-sm leading-6">
+            Add a task above, or create a recurring habit in Settings.
           </p>
         ) : (
           tasks.map((task) => {
             const done = completed.has(task.id);
             return (
               <button
-                className="border-border bg-card flex min-h-14 w-full items-center gap-3 rounded-xl border px-4 text-left"
+                className={`border-border bg-card flex min-h-16 w-full items-center gap-3 rounded-2xl border px-4 text-left shadow-sm transition-all hover:-translate-y-px hover:shadow-md ${done ? "opacity-70" : ""}`}
                 key={task.id}
                 onClick={() => void toggle(task)}
                 type="button"
               >
                 <span
-                  className={`grid size-6 shrink-0 place-items-center rounded-md border ${done ? "border-primary bg-primary text-primary-foreground" : "border-input"}`}
+                  className={`grid size-6 shrink-0 place-items-center rounded-full border transition-colors ${done ? "border-primary bg-primary text-primary-foreground" : "border-input bg-card"}`}
                 >
                   {done ? <Check aria-hidden="true" className="size-4" /> : null}
                 </span>
-                <span className={done ? "text-muted-foreground line-through" : ""}>
+                <span
+                  className={`font-medium ${done ? "text-muted-foreground line-through" : ""}`}
+                >
                   {task.name}
                 </span>
-                <span className="text-muted-foreground ml-auto text-xs capitalize">
-                  {task.task_type}
+                <span className="text-muted-foreground ml-auto text-xs">
+                  {task.task_type === "fixed" ? "Daily" : "Today"}
                 </span>
               </button>
             );

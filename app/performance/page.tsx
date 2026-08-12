@@ -4,9 +4,9 @@ export default function PerformancePage() {
   return (
     <div className="space-y-8">
       <PageHeader
-        eyebrow="Honest insights"
-        title="Performance"
-        description="Clear trends calculated only from your activity."
+        eyebrow="Your review"
+        title="Progress"
+        description="Simple patterns drawn from the activity you’ve actually logged."
       />
       <PerformanceDashboard />
     </div>

@@ -38,18 +38,21 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       <PageHeader
-        eyebrow="Personal preferences"
+        eyebrow="Your space"
         title="Settings"
-        description="Profile and preferences for your account."
+        description="Set up the parts of Manager that support your daily rhythm."
       />
-      <section className="border-border bg-card flex items-center gap-4 rounded-2xl border p-5">
-        <span className="bg-primary/15 text-primary grid size-11 place-items-center rounded-xl">
+      <section className="border-border bg-card flex flex-wrap items-center gap-4 rounded-3xl border p-5 shadow-sm sm:p-6">
+        <span className="bg-secondary text-primary grid size-11 place-items-center rounded-2xl">
           <Settings2 aria-hidden="true" className="size-5" />
         </span>
         <div>
-          <h2 className="font-semibold">{email ?? "Signed-in user"}</h2>
+          <p className="text-muted-foreground text-xs font-bold tracking-[0.1em] uppercase">
+            Account
+          </p>
+          <h2 className="mt-1 font-semibold">{email ?? "Signed-in user"}</h2>
           <p className="text-muted-foreground mt-1 text-sm">
             {settings?.timezone ?? "Timezone is syncing from your browser"} ·{" "}
             {settings?.theme ?? "dark"} theme
@@ -64,8 +67,10 @@ export default function SettingsPage() {
           Sign out
         </Button>
       </section>
-      <ObjectivesManager />
-      <TasksManager />
+      <div className="grid gap-10 xl:grid-cols-2 xl:items-start">
+        <ObjectivesManager />
+        <TasksManager />
+      </div>
     </div>
   );
 }

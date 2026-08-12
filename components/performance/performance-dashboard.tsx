@@ -51,20 +51,46 @@ export function PerformanceDashboard() {
   }, [days]);
   const metrics = useMemo(() => {
     const active = tasks.filter((task) => task.is_active);
-    const completed = completions.filter((item) => item.completed).length;
-    const expected = active.length * days;
-    const rate = expected ? Math.round((completed / expected) * 100) : 0;
-    const flexibleIds = active
-      .filter((task) => task.task_type === "flexible")
-      .map((task) => task.id);
-    const fixedIds = active
-      .filter((task) => task.task_type === "fixed")
-      .map((task) => task.id);
+    const start = format(subDays(new Date(), days - 1), "yyyy-MM-dd");
+    const end = format(new Date(), "yyyy-MM-dd");
+    const fixed = active.filter((task) => task.task_type === "fixed");
+    const flexible = active.filter(
+      (task) =>
+        task.task_type === "flexible" &&
+        task.scheduled_date !== null &&
+        task.scheduled_date >= start &&
+        task.scheduled_date <= end,
+    );
+    const fixedIds = new Set(fixed.map((task) => task.id));
+    const flexibleDates = new Map(
+      flexible.map((task) => [task.id, task.scheduled_date]),
+    );
+    const fixedCompletions = completions.filter((item) => fixedIds.has(item.task_id));
+    const flexibleCompletions = completions.filter(
+      (item) => flexibleDates.get(item.task_id) === item.date,
+    );
+    const fixedExpected = fixed.reduce((total, task) => {
+      const createdDate = task.created_at.slice(0, 10);
+      const firstExpectedDate = createdDate > start ? createdDate : start;
+      const activeDays = Math.max(
+        0,
+        Math.floor(
+          (new Date(`${format(new Date(), "yyyy-MM-dd")}T00:00:00`).getTime() -
+            new Date(`${firstExpectedDate}T00:00:00`).getTime()) /
+            86400000,
+        ) + 1,
+      );
+      return total + activeDays;
+    }, 0);
+    const flexibleExpected = flexible.length;
     const durations = entries.filter((entry) => entry.duration_minutes !== null);
     return {
-      rate,
-      fixed: calculateTaskCompletionRate(fixedIds, completions),
-      flexible: calculateTaskCompletionRate(flexibleIds, completions),
+      rate: calculateTaskCompletionRate(fixedExpected + flexibleExpected, [
+        ...fixedCompletions,
+        ...flexibleCompletions,
+      ]),
+      fixed: calculateTaskCompletionRate(fixedExpected, fixedCompletions),
+      flexible: calculateTaskCompletionRate(flexibleExpected, flexibleCompletions),
       deepWork: calculateDurationTotal(durations),
       average: calculateAverage(
         entries.map((entry) => entry.numeric_value ?? 0).filter((value) => value > 0),
@@ -84,53 +110,60 @@ export function PerformanceDashboard() {
     [days, completions],
   );
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap gap-2">
+    <div className="space-y-8">
+      <div
+        className="bg-secondary inline-flex rounded-xl p-1"
+        aria-label="Review period"
+      >
         {ranges.map((range) => (
           <button
-            className={`min-h-10 rounded-xl px-4 text-sm ${days === range ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}
+            aria-pressed={days === range}
+            className={`min-h-9 rounded-lg px-4 text-sm font-semibold transition-colors ${days === range ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"}`}
             key={range}
             onClick={() => setDays(range)}
             type="button"
           >
-            {range} Days
+            {range} days
           </button>
         ))}
       </div>
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <Metric label="Task completion" value={`${metrics.rate}%`} />
-        <Metric label="Fixed habits" value={`${metrics.fixed}%`} />
-        <Metric label="Flexible tasks" value={`${metrics.flexible}%`} />
-        <Metric
-          label="Duration total"
-          value={`${Math.round(metrics.deepWork / 60)}h`}
-        />
+        <Metric label="Completion" value={`${metrics.rate}%`} />
+        <Metric label="Daily habits" value={`${metrics.fixed}%`} />
+        <Metric label="One-off tasks" value={`${metrics.flexible}%`} />
+        <Metric label="Tracked time" value={`${Math.round(metrics.deepWork / 60)}h`} />
       </div>
-      <section className="border-border bg-card rounded-2xl border p-5">
-        <h2 className="font-semibold">Completed tasks</h2>
+      <section className="border-border bg-card rounded-3xl border p-5 shadow-sm sm:p-6">
+        <h2 className="text-lg font-semibold tracking-[-0.02em]">Completed tasks</h2>
         <p className="text-muted-foreground mt-1 text-sm">
           Your actual completion history over the selected period.
         </p>
-        <div className="mt-5 h-64">
+        <div className="mt-6 h-64">
           <ResponsiveContainer height="100%" width="100%">
             <BarChart data={chartData}>
-              <XAxis dataKey="day" stroke="#9aa4b2" tick={{ fontSize: 11 }} />
-              <YAxis allowDecimals={false} stroke="#9aa4b2" tick={{ fontSize: 11 }} />
+              <XAxis dataKey="day" stroke="#aaa59a" tick={{ fontSize: 11 }} />
+              <YAxis allowDecimals={false} stroke="#aaa59a" tick={{ fontSize: 11 }} />
               <Tooltip
                 contentStyle={{
-                  background: "#1a1f26",
-                  border: "1px solid #252b33",
+                  background: "#fffefd",
+                  border: "1px solid #e5e1d8",
                   borderRadius: 12,
+                  color: "#292722",
                 }}
               />
-              <Bar dataKey="completed" fill="#7c8cff" radius={[5, 5, 0, 0]} />
+              <Bar dataKey="completed" fill="#526a4d" radius={[6, 6, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
       </section>
-      <section className="border-border bg-card rounded-2xl border p-5">
-        <h2 className="font-semibold">Data-led insight</h2>
-        <p className="text-muted-foreground mt-2 text-sm">
+      <section className="bg-primary text-primary-foreground rounded-3xl p-5 sm:p-6">
+        <p className="text-primary-foreground/70 text-xs font-bold tracking-[0.12em] uppercase">
+          Your review
+        </p>
+        <h2 className="mt-2 text-lg font-semibold tracking-[-0.02em]">
+          A simple insight
+        </h2>
+        <p className="text-primary-foreground/80 mt-2 text-sm leading-6">
           {metrics.rate
             ? `You completed ${metrics.rate}% of your planned task instances in the last ${days} days.`
             : "Add tasks and tracker entries to reveal useful, honest trends."}
@@ -141,9 +174,11 @@ export function PerformanceDashboard() {
 }
 function Metric({ label, value }: { label: string; value: string }) {
   return (
-    <article className="border-border bg-card rounded-2xl border p-5">
-      <p className="text-muted-foreground text-sm">{label}</p>
-      <p className="mt-2 text-3xl font-semibold">{value}</p>
+    <article className="border-border bg-card rounded-2xl border p-5 shadow-sm">
+      <p className="text-muted-foreground text-xs font-bold tracking-[0.08em] uppercase">
+        {label}
+      </p>
+      <p className="mt-3 text-3xl font-semibold tracking-[-0.04em]">{value}</p>
     </article>
   );
 }

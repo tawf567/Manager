@@ -10,5 +10,6 @@ export type Task = {
   scheduled_date: string | null;
   sort_order: number;
   is_active: boolean;
+  created_at: string;
 };
 export type TaskCompletion = { task_id: string; date: string; completed: boolean };

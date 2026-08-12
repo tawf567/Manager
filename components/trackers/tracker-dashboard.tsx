@@ -1,7 +1,7 @@
 "use client";
 
 import { format } from "date-fns";
-import { Archive, Plus } from "lucide-react";
+import { Archive, Plus, SlidersHorizontal } from "lucide-react";
 import { type FormEvent, useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -118,18 +118,23 @@ export function TrackerDashboard() {
 
   return (
     <div className="space-y-6">
+      <p className="text-muted-foreground max-w-2xl text-sm leading-6">
+        Log only the signals that help you notice patterns and make better choices.
+      </p>
       <form
-        className="border-border bg-card flex flex-col gap-2 rounded-2xl border p-4 sm:flex-row"
+        className="border-border bg-card flex flex-col gap-2 rounded-2xl border p-2 shadow-sm sm:flex-row"
         onSubmit={add}
       >
         <input
-          className="border-input bg-background h-11 flex-1 rounded-xl border px-3 text-sm"
+          aria-label="Tracker name"
+          className="placeholder:text-muted-foreground h-11 flex-1 rounded-xl bg-transparent px-3 text-sm outline-none"
           onChange={(event) => setName(event.target.value)}
           placeholder="Tracker name"
           value={name}
         />
         <select
-          className="border-input bg-background h-11 rounded-xl border px-3 text-sm"
+          aria-label="Tracker type"
+          className="bg-secondary h-11 rounded-xl px-3 text-sm outline-none"
           onChange={(event) => setType(event.target.value as TrackerType)}
           value={type}
         >
@@ -139,16 +144,16 @@ export function TrackerDashboard() {
             </option>
           ))}
         </select>
-        <Button type="submit">
+        <Button className="sm:shrink-0" type="submit">
           <Plus aria-hidden="true" className="size-4" />
           Add tracker
         </Button>
       </form>
-      {message ? <p className="text-sm text-red-300">{message}</p> : null}
+      {message ? <p className="text-sm text-red-700">{message}</p> : null}
       <div className="grid gap-3 lg:grid-cols-2">
         {trackers.length === 0 ? (
-          <p className="border-border text-muted-foreground rounded-2xl border border-dashed p-6 text-sm">
-            Track what matters. Create your first tracker above.
+          <p className="border-border bg-card text-muted-foreground rounded-3xl border border-dashed p-8 text-center text-sm leading-6 lg:col-span-2">
+            Start with one small signal. You can add more only when they are useful.
           </p>
         ) : (
           trackers.map((tracker) => (
@@ -177,8 +182,85 @@ function TrackerCard({
   onSave: (values: Partial<TrackerEntry>) => void;
   onArchive: () => void;
 }) {
-  const [first, setFirst] = useState("");
-  const [second, setSecond] = useState("");
+  const isBoolean =
+    tracker.tracker_type === "boolean" || tracker.tracker_type === "streak";
+  const entryKey = entry
+    ? `${entry.id}-${entry.numeric_value}-${entry.duration_minutes}-${entry.start_time}-${entry.end_time}-${entry.rating_value}-${entry.currency_value}`
+    : "new";
+
+  return (
+    <article className="border-border bg-card rounded-3xl border p-5 shadow-sm transition-shadow hover:shadow-md">
+      <div className="flex items-start gap-3">
+        <span className="bg-secondary text-primary grid size-10 place-items-center rounded-2xl">
+          <SlidersHorizontal aria-hidden="true" className="size-4" />
+        </span>
+        <div className="min-w-0 flex-1">
+          <p className="text-muted-foreground text-[10px] font-bold tracking-[0.12em] uppercase">
+            {labels[tracker.tracker_type]}
+          </p>
+          <h2 className="mt-1 font-semibold">{tracker.name}</h2>
+        </div>
+        <Button
+          aria-label={`Archive ${tracker.name}`}
+          onClick={onArchive}
+          size="sm"
+          type="button"
+          variant="ghost"
+        >
+          <Archive aria-hidden="true" className="size-4" />
+        </Button>
+      </div>
+      {isBoolean ? (
+        <label className="bg-secondary mt-5 flex min-h-12 items-center gap-3 rounded-xl px-3 text-sm font-medium">
+          <input
+            checked={entry?.boolean_value ?? false}
+            className="size-5 accent-[var(--primary)]"
+            onChange={(event) => onSave({ boolean_value: event.target.checked })}
+            type="checkbox"
+          />
+          Completed today
+        </label>
+      ) : (
+        <TrackerEntryForm
+          entry={entry}
+          key={entryKey}
+          onSave={onSave}
+          tracker={tracker}
+        />
+      )}
+      <p className="text-muted-foreground mt-4 text-xs">
+        Today: {entry ? display(entry) : "No entry"}
+      </p>
+    </article>
+  );
+}
+
+function TrackerEntryForm({
+  tracker,
+  entry,
+  onSave,
+}: {
+  tracker: Tracker;
+  entry?: TrackerEntry;
+  onSave: (values: Partial<TrackerEntry>) => void;
+}) {
+  const initialValue =
+    tracker.tracker_type === "duration"
+      ? entry?.duration_minutes
+      : tracker.tracker_type === "currency"
+        ? entry?.currency_value
+        : tracker.tracker_type === "rating"
+          ? entry?.rating_value
+          : entry?.numeric_value;
+  const [first, setFirst] = useState(
+    tracker.tracker_type === "time_range"
+      ? (entry?.start_time?.slice(0, 5) ?? "")
+      : initialValue === null || initialValue === undefined
+        ? ""
+        : String(initialValue),
+  );
+  const [second, setSecond] = useState(entry?.end_time?.slice(0, 5) ?? "");
+
   function numericForm(
     kind: "number" | "duration" | "counter" | "currency" | "rating",
   ) {
@@ -205,7 +287,7 @@ function TrackerCard({
         }}
       >
         <input
-          className="border-input bg-background h-11 min-w-0 flex-1 rounded-xl border px-3 text-sm"
+          className="border-input bg-background focus:ring-ring h-11 min-w-0 flex-1 rounded-xl border px-3 text-sm outline-none focus:ring-2"
           inputMode="decimal"
           max={kind === "rating" ? 10 : undefined}
           min={kind === "rating" ? 1 : undefined}
@@ -222,38 +304,9 @@ function TrackerCard({
       </form>
     );
   }
-  const isBoolean =
-    tracker.tracker_type === "boolean" || tracker.tracker_type === "streak";
   return (
-    <article className="border-border bg-card rounded-2xl border p-5">
-      <div className="flex items-start gap-3">
-        <div className="min-w-0 flex-1">
-          <p className="text-muted-foreground text-xs tracking-wider uppercase">
-            {labels[tracker.tracker_type]}
-          </p>
-          <h2 className="mt-1 font-semibold">{tracker.name}</h2>
-        </div>
-        <Button
-          aria-label={`Archive ${tracker.name}`}
-          onClick={onArchive}
-          size="sm"
-          type="button"
-          variant="ghost"
-        >
-          <Archive aria-hidden="true" className="size-4" />
-        </Button>
-      </div>
-      {isBoolean ? (
-        <label className="mt-4 flex min-h-11 items-center gap-3 text-sm">
-          <input
-            checked={entry?.boolean_value ?? false}
-            className="size-5 accent-[var(--primary)]"
-            onChange={(event) => onSave({ boolean_value: event.target.checked })}
-            type="checkbox"
-          />
-          Completed today
-        </label>
-      ) : tracker.tracker_type === "time_range" ? (
+    <>
+      {tracker.tracker_type === "time_range" ? (
         <form
           className="mt-4 flex gap-2"
           onSubmit={(event) => {
@@ -267,13 +320,13 @@ function TrackerCard({
           }}
         >
           <input
-            className="border-input bg-background h-11 rounded-xl border px-2 text-sm"
+            className="border-input bg-background focus:ring-ring h-11 rounded-xl border px-2 text-sm outline-none focus:ring-2"
             onChange={(event) => setFirst(event.target.value)}
             type="time"
             value={first}
           />
           <input
-            className="border-input bg-background h-11 rounded-xl border px-2 text-sm"
+            className="border-input bg-background focus:ring-ring h-11 rounded-xl border px-2 text-sm outline-none focus:ring-2"
             onChange={(event) => setSecond(event.target.value)}
             type="time"
             value={second}
@@ -288,10 +341,7 @@ function TrackerCard({
             "number" | "duration" | "counter" | "currency" | "rating",
         )
       )}
-      <p className="text-muted-foreground mt-4 text-xs">
-        Today: {entry ? display(entry) : "No entry"}
-      </p>
-    </article>
+    </>
   );
 }
 function display(entry: TrackerEntry) {

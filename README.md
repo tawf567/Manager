@@ -1,9 +1,17 @@
 # Manager
 
-Manager is a dark-first personal life-management web app. This repository is
-currently at Phase 1 of the build plan: the typed Next.js foundation,
-responsive application shell, and Supabase email/password authentication are in
-place. It is configured as a static GitHub Pages app backed by Supabase.
+Manager is a dark-first personal life-management web app. It is a static
+Next.js application backed by Supabase and hosted on GitHub Pages.
+
+## Features
+
+- Email/password authentication with per-user row-level security.
+- Objectives to anchor the areas of life that matter most.
+- Fixed daily habits and flexible, date-specific tasks with completion history.
+- Daily trackers for booleans, numbers, durations, time ranges, ratings,
+  counters, currencies, and streaks.
+- A performance dashboard based on real task completion and tracker data.
+- An achievements timeline for recording meaningful milestones.
 
 ## Local development
 
@@ -29,6 +37,9 @@ to enable fixed daily tasks, flexible scheduled tasks, and dated completions.
 
 Apply [the Phase 4 trackers migration](supabase/migrations/202608110004_create_trackers.sql)
 to enable daily tracker creation and entries.
+
+Apply [the Phase 5 achievements migration](supabase/migrations/202608110005_create_achievements.sql)
+to enable the achievements timeline.
 
 In Supabase Authentication → URL Configuration, add `http://localhost:3000`
 and `https://tawf567.github.io/Manager/auth/callback/` to the allowed redirect

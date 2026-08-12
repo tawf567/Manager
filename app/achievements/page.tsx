@@ -5,8 +5,8 @@ export default function AchievementsPage() {
     <div className="space-y-8">
       <PageHeader
         eyebrow="Progress journal"
-        title="Achievements"
-        description="A personal history of the milestones and moments worth remembering."
+        title="Journal"
+        description="A calm record of the milestones and moments worth remembering."
       />
       <AchievementsTimeline />
     </div>

@@ -27,48 +27,37 @@ export function ObjectiveCards() {
   }, []);
 
   if (isLoading) {
-    return (
-      <div className="border-border bg-card h-40 animate-pulse rounded-2xl border" />
-    );
+    return <div className="bg-muted h-24 animate-pulse rounded-2xl" />;
   }
 
   if (objectives.length === 0) {
     return (
-      <p className="border-border text-muted-foreground rounded-2xl border border-dashed p-5 text-sm">
-        Add an objective in Settings to get started.
+      <p className="text-muted-foreground bg-muted rounded-2xl px-4 py-5 text-sm">
+        Add an objective in Settings to give your days direction.
       </p>
     );
   }
 
   return (
-    <div className="flex snap-x gap-3 overflow-x-auto pb-2 lg:grid lg:grid-cols-3 lg:overflow-visible">
+    <div className="flex gap-3 overflow-x-auto pb-1 sm:grid sm:grid-cols-2 sm:overflow-visible xl:grid-cols-3">
       {objectives.map((objective) => (
         <article
-          className="border-border bg-card min-w-[260px] snap-start rounded-2xl border p-5 lg:min-w-0"
+          className="bg-secondary/70 min-w-[200px] rounded-2xl p-4 sm:min-w-0"
           key={objective.id}
         >
           <span
-            className="grid size-10 place-items-center rounded-xl"
+            className="grid size-9 place-items-center rounded-xl"
             style={{
-              backgroundColor: `${objective.color ?? "#7c8cff"}22`,
-              color: objective.color ?? "#7c8cff",
+              backgroundColor: `${objective.color ?? "#526a4d"}22`,
+              color: objective.color ?? "#526a4d",
             }}
           >
             <ObjectiveIcon className="size-5" icon={objective.icon} />
           </span>
-          <h3 className="mt-5 font-semibold">{objective.name}</h3>
-          <p className="text-muted-foreground mt-2 min-h-12 text-sm leading-6">
+          <h3 className="mt-4 font-semibold">{objective.name}</h3>
+          <p className="text-muted-foreground mt-1 min-h-10 text-sm leading-5">
             {objective.description ?? "Define what progress looks like for you."}
           </p>
-          <div
-            aria-label="Progress pending task setup"
-            className="bg-muted mt-5 h-1.5 overflow-hidden rounded-full"
-          >
-            <div
-              className="h-full w-0 rounded-full"
-              style={{ backgroundColor: objective.color ?? "#7c8cff" }}
-            />
-          </div>
         </article>
       ))}
     </div>

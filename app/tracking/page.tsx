@@ -6,7 +6,7 @@ export default function TrackingPage() {
     <div className="space-y-8">
       <PageHeader
         eyebrow="Daily signals"
-        title="Tracking"
+        title="Track"
         description="Keep the few measurements that help you make better decisions."
       />
       <TrackerDashboard />

@@ -9,17 +9,17 @@ type PageHeaderProps = {
 
 export function PageHeader({ eyebrow, title, description, action }: PageHeaderProps) {
   return (
-    <header className="border-border flex flex-col gap-4 border-b pb-6 sm:flex-row sm:items-end sm:justify-between">
+    <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div>
         {eyebrow ? (
-          <p className="text-primary mb-2 text-xs font-semibold tracking-[0.16em] uppercase">
+          <p className="text-primary mb-2 text-xs font-bold tracking-[0.14em] uppercase">
             {eyebrow}
           </p>
         ) : null}
-        <h1 className="text-foreground text-3xl font-semibold tracking-tight">
+        <h1 className="text-foreground text-3xl font-semibold tracking-[-0.04em] sm:text-4xl">
           {title}
         </h1>
-        <p className="text-muted-foreground mt-2 max-w-2xl text-sm leading-6">
+        <p className="text-muted-foreground mt-2 max-w-xl text-sm leading-6 sm:text-base">
           {description}
         </p>
       </div>
