@@ -34,14 +34,12 @@ export function AchievementsTimeline() {
     const s = createClient();
     const { data: a } = await s.auth.getUser();
     if (!a.user) return;
-    await s
-      .from("achievements")
-      .insert({
-        user_id: a.user.id,
-        title: title.trim(),
-        description: description.trim() || null,
-        achievement_date: format(new Date(), "yyyy-MM-dd"),
-      });
+    await s.from("achievements").insert({
+      user_id: a.user.id,
+      title: title.trim(),
+      description: description.trim() || null,
+      achievement_date: format(new Date(), "yyyy-MM-dd"),
+    });
     setTitle("");
     setDescription("");
     await load();
