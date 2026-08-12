@@ -5,13 +5,21 @@ import { type FormEvent, useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
-import type { Task } from "@/types/task";
+import { taskPriorities, type Task, type TaskPriority } from "@/types/task";
 
-type Draft = { name: string; taskType: "fixed" | "flexible"; scheduledDate: string };
+type Draft = {
+  name: string;
+  taskType: "fixed" | "flexible";
+  scheduledDate: string;
+  dueTime: string;
+  priority: TaskPriority;
+};
 const blank: Draft = {
   name: "",
   taskType: "fixed",
   scheduledDate: new Date().toISOString().slice(0, 10),
+  dueTime: "",
+  priority: "medium",
 };
 
 export function TasksManager() {
@@ -62,6 +70,8 @@ export function TasksManager() {
       name,
       task_type: draft.taskType,
       scheduled_date: draft.taskType === "flexible" ? draft.scheduledDate : null,
+      due_time: draft.dueTime || null,
+      priority: draft.priority,
       frequency_type: draft.taskType === "fixed" ? "daily" : "once",
     };
     const response = editingId
@@ -99,6 +109,8 @@ export function TasksManager() {
       name: task.name,
       taskType: task.task_type,
       scheduledDate: task.scheduled_date ?? new Date().toISOString().slice(0, 10),
+      dueTime: task.due_time?.slice(0, 5) ?? "",
+      priority: task.priority ?? "medium",
     });
     setOpen(true);
   }
@@ -140,21 +152,54 @@ export function TasksManager() {
             value={draft.name}
           />
           <label className="text-muted-foreground block text-sm">
-            Type
+            Priority
             <select
               className="border-input bg-card focus:ring-ring mt-1 h-11 w-full rounded-xl border px-3 text-sm outline-none focus:ring-2"
               onChange={(event) =>
                 setDraft({
                   ...draft,
-                  taskType: event.target.value as Draft["taskType"],
+                  priority: event.target.value as TaskPriority,
                 })
               }
-              value={draft.taskType}
+              value={draft.priority}
             >
-              <option value="fixed">Fixed (daily)</option>
-              <option value="flexible">Flexible (one date)</option>
+              {taskPriorities.map((priority) => (
+                <option key={priority} value={priority}>
+                  {priority[0]?.toUpperCase()}
+                  {priority.slice(1)}
+                </option>
+              ))}
             </select>
           </label>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <label className="text-muted-foreground block text-sm">
+              Type
+              <select
+                className="border-input bg-card focus:ring-ring mt-1 h-11 w-full rounded-xl border px-3 text-sm outline-none focus:ring-2"
+                onChange={(event) =>
+                  setDraft({
+                    ...draft,
+                    taskType: event.target.value as Draft["taskType"],
+                  })
+                }
+                value={draft.taskType}
+              >
+                <option value="fixed">Daily habit</option>
+                <option value="flexible">One-off task</option>
+              </select>
+            </label>
+            <label className="text-muted-foreground block text-sm">
+              Due time <span className="text-muted-foreground/70">(optional)</span>
+              <input
+                className="border-input bg-card focus:ring-ring mt-1 h-11 w-full rounded-xl border px-3 text-sm outline-none focus:ring-2"
+                onChange={(event) =>
+                  setDraft({ ...draft, dueTime: event.target.value })
+                }
+                type="time"
+                value={draft.dueTime}
+              />
+            </label>
+          </div>
           {draft.taskType === "flexible" ? (
             <label className="text-muted-foreground block text-sm">
               Scheduled date
@@ -188,9 +233,9 @@ export function TasksManager() {
             <div className="min-w-0 flex-1">
               <h3 className="truncate text-sm font-medium">{task.name}</h3>
               <p className="text-muted-foreground text-xs">
-                {task.task_type === "fixed"
-                  ? "Fixed daily"
-                  : `Flexible · ${task.scheduled_date}`}
+                {task.priority} ·{" "}
+                {task.task_type === "fixed" ? "Daily" : task.scheduled_date}
+                {task.due_time ? ` · ${task.due_time.slice(0, 5)}` : ""}
               </p>
             </div>
             <Button

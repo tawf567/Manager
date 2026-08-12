@@ -41,6 +41,9 @@ to enable daily tracker creation and entries.
 Apply [the Phase 5 achievements migration](supabase/migrations/202608110005_create_achievements.sql)
 to enable the achievements timeline.
 
+Apply [the Phase 6 task command-center migration](supabase/migrations/202608120001_add_task_priority_and_due_time.sql)
+to enable task priorities and optional due times.
+
 In Supabase Authentication → URL Configuration, add `http://localhost:3000`
 and `https://tawf567.github.io/Manager/auth/callback/` to the allowed redirect
 URLs. This is required for email-confirmation links to return to the application.

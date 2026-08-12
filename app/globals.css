@@ -22,21 +22,21 @@
 
 :root {
   color-scheme: dark;
-  --background: #11130f;
-  --foreground: #f4f0e7;
-  --card: #1a1d18;
-  --card-foreground: #f4f0e7;
-  --popover: #23261f;
-  --popover-foreground: #f4f0e7;
-  --primary: #a7c99b;
-  --primary-foreground: #172014;
-  --secondary: #252920;
-  --secondary-foreground: #f4f0e7;
-  --muted: #2d3129;
-  --muted-foreground: #b5b7ac;
-  --border: #353a31;
-  --input: #4b5147;
-  --ring: #bad9ae;
+  --background: #0b0b10;
+  --foreground: #f4f4f8;
+  --card: #12121a;
+  --card-foreground: #f4f4f8;
+  --popover: #1a1a25;
+  --popover-foreground: #f4f4f8;
+  --primary: #a78bfa;
+  --primary-foreground: #120e20;
+  --secondary: #1a1a25;
+  --secondary-foreground: #f4f4f8;
+  --muted: #232330;
+  --muted-foreground: #a7a7b8;
+  --border: #2d2d3c;
+  --input: #45455a;
+  --ring: #c4b5fd;
 }
 
 * {
@@ -50,7 +50,7 @@ html {
 body {
   min-width: 320px;
   background:
-    radial-gradient(circle at top left, #20281d 0, transparent 31rem), var(--background);
+    radial-gradient(circle at top left, #171329 0, transparent 34rem), var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;

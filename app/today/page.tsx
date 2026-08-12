@@ -8,11 +8,11 @@ import { Button } from "@/components/ui/button";
 
 export default function TodayPage() {
   return (
-    <div className="space-y-10">
+    <div className="space-y-8">
       <PageHeader
-        eyebrow="Your daily space"
+        eyebrow="Personal command center"
         title="Today"
-        description="Keep the day simple. Start with what needs your attention, then let the rest follow."
+        description="A single place to decide what matters, move work forward, and stay ahead of what’s next."
       />
 
       <TodayTasks />

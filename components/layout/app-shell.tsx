@@ -42,7 +42,7 @@ function NavItem({ item, mobile = false }: { item: NavigationItem; mobile?: bool
         "focus-visible:ring-ring flex items-center gap-3 rounded-xl font-medium transition-colors focus-visible:ring-2 focus-visible:outline-none",
         mobile
           ? "min-h-14 flex-1 flex-col justify-center gap-1 px-1 text-[11px]"
-          : "min-h-11 px-3 text-sm",
+          : "min-h-10 rounded-lg px-3 text-sm",
         isActive
           ? "bg-primary text-primary-foreground shadow-sm"
           : "text-muted-foreground hover:bg-muted hover:text-foreground",
@@ -70,12 +70,12 @@ export function AppShell({ children }: PropsWithChildren) {
     <AuthGate>
       <div className="bg-background text-foreground min-h-dvh">
         <TimezoneSync />
-        <aside className="border-border bg-card/90 fixed inset-y-0 left-0 z-20 hidden w-64 border-r px-4 py-5 lg:flex lg:flex-col">
+        <aside className="border-border fixed inset-y-0 left-0 z-20 hidden w-60 border-r bg-[#0f0f17]/95 px-3 py-4 lg:flex lg:flex-col">
           <Link
-            className="focus-visible:ring-ring mb-9 flex min-h-11 items-center gap-3 rounded-xl px-3 focus-visible:ring-2 focus-visible:outline-none"
+            className="focus-visible:ring-ring mb-8 flex min-h-11 items-center gap-3 rounded-lg px-3 focus-visible:ring-2 focus-visible:outline-none"
             href="/today"
           >
-            <span className="bg-primary text-primary-foreground grid size-9 place-items-center rounded-xl shadow-sm">
+            <span className="bg-primary text-primary-foreground grid size-8 place-items-center rounded-lg shadow-sm">
               <CheckSquare2 aria-hidden="true" className="size-4" />
             </span>
             <span className="text-base font-bold tracking-[-0.03em]">Manager</span>
@@ -87,7 +87,7 @@ export function AppShell({ children }: PropsWithChildren) {
           </nav>
           <div className="mt-auto space-y-3">
             <p className="text-muted-foreground px-3 text-xs leading-5">
-              Make room for what matters.
+              Personal operating system
             </p>
             <Link
               className="text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-ring flex min-h-11 items-center gap-3 rounded-xl px-3 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:outline-none"
@@ -99,7 +99,7 @@ export function AppShell({ children }: PropsWithChildren) {
           </div>
         </aside>
 
-        <main className="mx-auto min-h-dvh w-full max-w-6xl px-4 pt-6 pb-24 sm:px-6 lg:ml-64 lg:w-[calc(100%-16rem)] lg:px-12 lg:py-12">
+        <main className="mx-auto min-h-dvh w-full max-w-7xl px-4 pt-6 pb-24 sm:px-6 lg:ml-60 lg:w-[calc(100%-15rem)] lg:px-10 lg:py-10">
           <div className="mb-6 flex items-center justify-between lg:hidden">
             <Link
               className="flex items-center gap-2 text-base font-bold tracking-[-0.03em]"
